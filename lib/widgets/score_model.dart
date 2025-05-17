@@ -2,36 +2,74 @@
 
 import 'package:flutter/material.dart';
 
-class ScoreModal extends StatelessWidget {
-  final int teamAScore;
-  final int teamBScore;
+class RoundResults {
+  final int? id;
+  final String teamA;
+  final String teamB;
+  final int scoreA;
+  final int scoreB;
   final int round;
-  final VoidCallback onNextRound;
 
-  const ScoreModal({
-    Key? key,
-    required this.teamAScore,
-    required this.teamBScore,
+  const RoundResults({
+    this.id,
+    required this.teamA,
+    required this.teamB,
+    required this.scoreA,
+    required this.scoreB,
     required this.round,
-    required this.onNextRound,
-  }) : super(key: key);
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'teamA': teamA,
+      'teamB': teamB,
+      'scoreA': scoreA,
+      'scoreB': scoreB,
+      'round': round,
+    };
+  }
+
+  factory RoundResults.fromMap(Map<String, dynamic> map) {
+    return RoundResults(
+      id: map['id'],
+      teamA: map['teamA'],
+      teamB: map['teamB'],
+      scoreA: map['scoreA'],
+      scoreB: map['scoreB'],
+      round: map['round'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Match{id: $id, teamA: $teamA, teamB: $teamB, scoreA: $scoreA, scoreB: $scoreB, round: $round}';
+  }
+}
+
+class ScoreModal extends StatelessWidget {
+  final RoundResults round;
+  final VoidCallback? onNextRound;
+
+  const ScoreModal({super.key, required this.round, required this.onNextRound});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Round $round Summary'),
+      title: Text('Round ${round.round} Summary'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Team A: $teamAScore points'),
+          Text('${round.teamA}: ${round.scoreA} points'),
           SizedBox(height: 8),
-          Text('Team B: $teamBScore points'),
+          Text('${round.teamB}: ${round.scoreB} points'),
         ],
       ),
       actions: [TextButton(onPressed: onNextRound, child: Text('Next Round'))],
     );
   }
 }
+
 //To use this class:
 /*
 showDialog(
