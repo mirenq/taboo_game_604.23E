@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:taboo_game_project/pages/setup_page.dart';
 import 'history_page.dart';
+import 'setup_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -28,20 +30,19 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              _buildMenuButton(
-                context,
-                'Start Game',
-                Icons.play_arrow,
-                () {
-                  // Will be implemented by other team
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Game starting soon!'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                },
-              ),
+              _buildMenuButton(context, 'Start Game', Icons.play_arrow, () {
+                // Will be implemented by other team
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Game starting soon!'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SetupPage()),
+                );
+              }),
               const SizedBox(height: 20),
               _buildMenuButton(
                 context,
@@ -76,10 +77,7 @@ class HomePage extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.7,
       child: ElevatedButton.icon(
         icon: Icon(icon, size: 24),
-        label: Text(
-          text,
-          style: const TextStyle(fontSize: 18),
-        ),
+        label: Text(text, style: const TextStyle(fontSize: 18)),
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -94,41 +92,42 @@ class HomePage extends StatelessWidget {
   void _showInstructionsDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('How to Play', textAlign: TextAlign.center),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                '1. Split into two teams\n'
-                '2. One player gives clues to help their team guess the main word\n'
-                '3. Avoid using any of the forbidden "taboo" words\n'
-                '4. Each correct guess = +1 point\n'
-                '5. Using a taboo word = -1 point\n'
-                '6. The team with most points after all rounds wins!',
-                style: TextStyle(fontSize: 16),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('How to Play', textAlign: TextAlign.center),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    '1. Split into two teams\n'
+                    '2. One player gives clues to help their team guess the main word\n'
+                    '3. Avoid using any of the forbidden "taboo" words\n'
+                    '4. Each correct guess = +1 point\n'
+                    '5. Using a taboo word = -1 point\n'
+                    '6. The team with most points after all rounds wins!',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Have fun!',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 16),
-              Text(
-                'Have fun!',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+            ),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Got It!'),
                 ),
               ),
             ],
           ),
-        ),
-        actions: [
-          Center(
-            child: TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Got It!'),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
