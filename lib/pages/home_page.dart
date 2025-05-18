@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:taboo_game_project/pages/setup_page.dart';
-import 'history_page.dart';
-import 'setup_page.dart';
+import '../pages/history_page.dart';
+import '../pages/setup_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

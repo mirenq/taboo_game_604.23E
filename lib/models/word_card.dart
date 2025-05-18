@@ -10,38 +10,77 @@ class WordCard extends StatelessWidget {
     required this.forbiddenWords,
   });
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Column(
+  //     children: [
+  //       Text(
+  //         'Main Word',
+  //         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+  //       ),
+  //       Card(
+  //         color: Colors.purple[100],
+  //         elevation: 5,
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(16),
+  //         ),
+  //         margin: const EdgeInsets.symmetric(vertical: 20),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(30.0),
+  //           child: Text(
+  //             mainWord,
+  //             style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+  //           ),
+  //         ),
+  //       ),
+  //       Text(
+  //         'Forbidden Words',
+  //         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+  //       ),
+  //       const SizedBox(height: 10),
+  //       ...forbiddenWords.map(
+  //         (word) => Padding(
+  //           padding: const EdgeInsets.symmetric(vertical: 4.0),
+  //           child: Text('• $word', style: const TextStyle(fontSize: 20)),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
+        const Text(
           'Main Word',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         Card(
           color: Colors.purple[100],
-          elevation: 5,
+          elevation: 3,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(12),
           ),
-          margin: const EdgeInsets.symmetric(vertical: 20),
+          margin: const EdgeInsets.symmetric(vertical: 10),
           child: Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
             child: Text(
               mainWord,
-              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
           ),
         ),
-        Text(
+        const Text(
           'Forbidden Words',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         ...forbiddenWords.map(
           (word) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Text('• $word', style: const TextStyle(fontSize: 20)),
+            padding: const EdgeInsets.symmetric(vertical: 2.0),
+            child: Text('• $word', style: const TextStyle(fontSize: 16)),
           ),
         ),
       ],

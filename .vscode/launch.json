@@ -1,10 +1,10 @@
 {
-    "configurations": [
-      {
-        "name": "Flutter Chrome",
-        "request": "launch",
-        "type": "dart",
-        "deviceId": "chrome"
-      }
-    ]
+  "configurations": [
+    {
+      "name": "Flutter Chrome",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome"
+    }
+  ]
 }
