@@ -7,12 +7,16 @@ class GamePage extends StatefulWidget {
   final List<String> teamA;
   final List<String> teamB;
   final int totalRounds;
+  final String teamAName;
+  final String teamBName;
 
   const GamePage({
     super.key,
     required this.teamA,
     required this.teamB,
     required this.totalRounds,
+    this.teamAName = 'Team A',
+    this.teamBName = 'Team B',
   });
 
   @override
@@ -126,7 +130,7 @@ class _GamePageState extends State<GamePage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${isTeamATurn ? "Team A" : "Team B"}\'s Turn'),
+          title: Text('${isTeamATurn ? widget.teamAName : widget.teamBName}\'s Turn'),
           content: Text('It\'s $currentPlayer\'s turn to play!'),
           actions: [
             TextButton(
@@ -143,59 +147,55 @@ class _GamePageState extends State<GamePage> {
 
   void _showFinalResults() {
   // Create a RoundResults object with the final scores
-  // final result = RoundResults(
-  //   teamA: "Team A",
-  //   teamB: "Team B",
-  //   scoreA: teamAScore,
-  //   scoreB: teamBScore,
-  //   round: widget.totalRounds
-  // );
+    final result = RoundResults(
+      teamA: widget.teamAName,
+      teamB: widget.teamBName,
+      scoreA: teamAScore,
+      scoreB: teamBScore,
+      round: widget.totalRounds
+    );
   
   // Show the final score dialog
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Game Over'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Final Scores after ${widget.totalRounds} rounds:'),
-            const SizedBox(height: 16),
-            Text('Team A: $teamAScore points'),
-            Text('Team B: $teamBScore points'),
-            const SizedBox(height: 16),
-            Text(
-              teamAScore > teamBScore 
-                ? 'Team A wins!' 
-                : teamBScore > teamAScore 
-                  ? 'Team B wins!' 
-                  : 'It\'s a tie!',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Game Over'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Final Scores after ${widget.totalRounds} rounds:'),
+              const SizedBox(height: 16),
+              Text('${widget.teamAName}: $teamAScore points'),
+              Text('${widget.teamBName}: $teamBScore points'),
+              const SizedBox(height: 16),
+              Text(
+                teamAScore > teamBScore 
+                  ? '${widget.teamAName} wins!' 
+                  : teamBScore > teamAScore 
+                    ? '${widget.teamBName} wins!' 
+                    : 'It\'s a tie!',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Navigate back to home page
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+              child: const Text('Return to Home'),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Save game results to local storage
-              // final storageService = LocalStorageService();
-              // storageService.insertRound(result);
-              
-              // Return to home page
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            },
-            child: const Text('Return to Home'),
-          ),
-        ],
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +223,7 @@ class _GamePageState extends State<GamePage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    isTeamATurn ? 'Team A\'s Turn' : 'Team B\'s Turn',
+                    isTeamATurn ? '${widget.teamAName}\'s Turn' : '${widget.teamBName}\'s Turn',
                     style: const TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                 ],
