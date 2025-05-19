@@ -11,13 +11,16 @@ class TabooCard {
 }
 
 class WordCardWidget extends StatefulWidget {
-  const WordCardWidget({super.key});
+  final Function()? onSkip;
+  final Function()? onTimeUp;
+
+  const WordCardWidget({super.key, this.onSkip, this.onTimeUp});
 
   @override
-  _WordCardWidgetState createState() => _WordCardWidgetState();
+  WordCardWidgetState createState() => WordCardWidgetState();
 }
 
-class _WordCardWidgetState extends State<WordCardWidget> {
+class WordCardWidgetState extends State<WordCardWidget> {
   final List<TabooCard> cards = [
     TabooCard(
       mainWord: 'Apple',
@@ -58,7 +61,7 @@ class _WordCardWidgetState extends State<WordCardWidget> {
   ];
 
   int currentIndex = 0;
-  int timeLeft = 60;
+  int timeLeft = 10;
   Timer? timer;
 
   @override
@@ -67,12 +70,22 @@ class _WordCardWidgetState extends State<WordCardWidget> {
     startTimer();
   }
 
-  void _nextCard() {
+  void resetTimer() {
     setState(() {
-      currentIndex = Random().nextInt(cards.length);
-      timeLeft = 60;
+      timeLeft = 10;
     });
     startTimer();
+  }
+
+  void nextCard() {
+    setState(() {
+      currentIndex = Random().nextInt(cards.length);
+    });
+    startTimer();
+
+    if (widget.onSkip != null) {
+      widget.onSkip!();
+    }
   }
 
   void startTimer() {
@@ -84,6 +97,10 @@ class _WordCardWidgetState extends State<WordCardWidget> {
         });
       } else {
         t.cancel();
+
+        if (widget.onTimeUp != null) {
+          widget.onTimeUp!();
+        }
       }
     });
   }
@@ -98,50 +115,52 @@ class _WordCardWidgetState extends State<WordCardWidget> {
   Widget build(BuildContext context) {
     final currentCard = cards[currentIndex];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Taboo Game'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Center(
-              child: Text(
-                '⏱ $timeLeft s',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.85),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              WordCard(
-                mainWord: currentCard.mainWord,
-                forbiddenWords: currentCard.forbiddenWords,
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton.icon(
-                onPressed: _nextCard,
-                icon: const Icon(Icons.skip_next),
-                label: const Text('Next Card'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 15,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Word Card',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  textStyle: const TextStyle(fontSize: 18),
                 ),
-              ),
-            ],
+                Text(
+                  '⏱ $timeLeft s',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: WordCard(
+              mainWord: currentCard.mainWord,
+              forbiddenWords: currentCard.forbiddenWords,
+            ),
+          ),
+        ],
       ),
     );
   }
