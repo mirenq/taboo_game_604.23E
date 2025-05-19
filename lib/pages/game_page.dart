@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/word_card_widget.dart';
-//import '../services/local_storage_service.dart';
+import '../services/local_storage_service.dart';
 import '../widgets/score_model.dart';
 
 class GamePage extends StatefulWidget {
@@ -31,18 +31,18 @@ class _GamePageState extends State<GamePage> {
   int teamBScore = 0;
   int currentPlayerIndex = 0;
   //final WordCardWidget wordCardWidget = const WordCardWidget();
-  final GlobalKey<WordCardWidgetState> _wordCardKey = GlobalKey<WordCardWidgetState>();
-  
+  final GlobalKey<WordCardWidgetState> _wordCardKey =
+      GlobalKey<WordCardWidgetState>();
+
   List<String> get currentTeam => isTeamATurn ? widget.teamA : widget.teamB;
   String get currentPlayer => currentTeam[currentPlayerIndex];
-  
+
   @override
   void initState() {
     super.initState();
     // Initialize with the first player of Team A
     currentPlayerIndex = 0;
   }
-
 
   void _skipCard() {
     // Skip current card
@@ -90,18 +90,24 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       // Move to next player
       currentPlayerIndex++;
-      
+
       // If we've gone through all players in the current team
       if (currentPlayerIndex >= currentTeam.length) {
         currentPlayerIndex = 0;
         // Switch teams
         isTeamATurn = !isTeamATurn;
-        
+
         // If we've gone through both teams, increment the round
         if (isTeamATurn) {
           // Only increment round when switching from Team B to Team A
           currentRound++;
-          
+
+          if (currentRound > 1) {
+            // Don't save for round 0->1
+            _saveRoundResults();
+            //print('Saved results for round ${currentRound - 1}');
+          }
+
           // Check if we've completed all rounds
           if (currentRound > widget.totalRounds) {
             // Game over - show final results
@@ -110,14 +116,14 @@ class _GamePageState extends State<GamePage> {
           }
         }
       }
-      
+
       // Show the team change notification
       _showTeamChangeDialog();
-      
+
       // Reset score for the new player
       roundScore = 0;
     });
-    
+
     // Reset the timer for the new player's turn
     if (_wordCardKey.currentState != null) {
       _wordCardKey.currentState!.resetTimer();
@@ -130,7 +136,9 @@ class _GamePageState extends State<GamePage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${isTeamATurn ? widget.teamAName : widget.teamBName}\'s Turn'),
+          title: Text(
+            '${isTeamATurn ? widget.teamAName : widget.teamBName}\'s Turn',
+          ),
           content: Text('It\'s $currentPlayer\'s turn to play!'),
           actions: [
             TextButton(
@@ -145,17 +153,29 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  void _showFinalResults() {
-  // Create a RoundResults object with the final scores
+  Future<void> _saveRoundResults() async {
+    // Create a RoundResults object with the current scores
     final result = RoundResults(
       teamA: widget.teamAName,
       teamB: widget.teamBName,
       scoreA: teamAScore,
       scoreB: teamBScore,
-      round: widget.totalRounds
+      round: currentRound - 1,
     );
-  
-  // Show the final score dialog
+
+    // Save the results to local storage
+    try {
+      final storageService = LocalStorageService();
+      await storageService.insertRound(result);
+      //print('Round $currentRound results saved successfully');
+    } catch (error) {
+      //print('Error saving round results: $error');
+    }
+  }
+
+  void _showFinalResults() {
+
+    // Show the final score dialog
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -171,10 +191,10 @@ class _GamePageState extends State<GamePage> {
               Text('${widget.teamBName}: $teamBScore points'),
               const SizedBox(height: 16),
               Text(
-                teamAScore > teamBScore 
-                  ? '${widget.teamAName} wins!' 
-                  : teamBScore > teamAScore 
-                    ? '${widget.teamBName} wins!' 
+                teamAScore > teamBScore
+                    ? '${widget.teamAName} wins!'
+                    : teamBScore > teamAScore
+                    ? '${widget.teamBName} wins!'
                     : 'It\'s a tie!',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
@@ -223,7 +243,9 @@ class _GamePageState extends State<GamePage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    isTeamATurn ? '${widget.teamAName}\'s Turn' : '${widget.teamBName}\'s Turn',
+                    isTeamATurn
+                        ? '${widget.teamAName}\'s Turn'
+                        : '${widget.teamBName}\'s Turn',
                     style: const TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                 ],
@@ -232,7 +254,12 @@ class _GamePageState extends State<GamePage> {
 
             // The WordCardWidget takes most of the screen
             Expanded(
-              child: Center(child: WordCardWidget(key: _wordCardKey, onTimeUp: _handleTimeUp,)),
+              child: Center(
+                child: WordCardWidget(
+                  key: _wordCardKey,
+                  onTimeUp: _handleTimeUp,
+                ),
+              ),
             ),
 
             // Next / Skip, Correct, Taboo buttons
@@ -256,7 +283,9 @@ class _GamePageState extends State<GamePage> {
                     ),
                     ElevatedButton(
                       onPressed: _tabooViolation,
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
                       child: const Text('Taboo'),
                     ),
                   ],

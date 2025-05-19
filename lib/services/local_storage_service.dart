@@ -1,113 +1,103 @@
 import 'dart:async';
 
 //import 'package:flutter/widgets.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import '../widgets/score_model.dart';
 
 class LocalStorageService {
   static final LocalStorageService _instance = LocalStorageService._internal();
-  static Database? _database;
+  Box<Map>? _roundsBox;
+  bool _initialized = false;
 
   factory LocalStorageService() => _instance;
 
   LocalStorageService._internal();
 
   // getting instance of database
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
+  Future<Box<Map>> get database async {
+    if (_roundsBox != null) return _roundsBox!;
+    await _initDatabase();
+    return _roundsBox!;
   }
 
   // initializing database
-  Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'results_database.db');
-    return await openDatabase(path, version: 1, onCreate: _createDb);
+  Future<void> _initDatabase() async {
+    if (!_initialized) {
+      await Hive.initFlutter();
+      // Open box for storing rounds
+      _roundsBox = await Hive.openBox<Map>('rounds');
+      _initialized = true;
+      //print('Hive database initialized successfully');
+    }
   }
 
-  // creating database table
-  Future<void> _createDb(Database db, int version) async {
-    await db.execute(''' 
-            CREATE TABLE rounds(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                teamA TEXT NOT NULL,
-                teamB TEXT NOT NULL,
-                scoreA INTEGER NOT NULL,
-                scoreB INTEGER NOT NULL,
-                round INTEGER NOT NULL
-            )
-        ''');
+  Future<void> ensureInitialized() async {
+    try {
+      await database;
+      //print('Database initialized successfully');
+    } catch (e) {
+      //print('Database initialization error: $e');
+    }
   }
 
   // inserting round results
   Future<int> insertRound(RoundResults round) async {
-    final Database db = await database;
-    return await db.insert(
-      'rounds',
-      round.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
+    final box = await database;
+    final id = box.length + 1; // Simple auto-increment
 
-  // updating a round in db
-  Future<int> updateRound(RoundResults round) async {
-    final Database db = await database;
-    return await db.update(
-      'rounds',
-      round.toMap(),
-      where: 'id = ?',
-      whereArgs: [round.id],
-    );
+    // Convert round to map and add ID
+    final Map<String, dynamic> roundMap = round.toMap();
+    roundMap['id'] = id;
+
+    // Store in Hive
+    await box.put(id, roundMap);
+    //print('Saved round with ID: $id');
+    return id;
   }
 
   // deleting a round in db
-  Future<int> deleteRound(int id) async {
-    final Database db = await database;
-    return await db.delete('rounds', where: 'id = ?', whereArgs: [id]);
+  Future<void> deleteRound(int id) async {
+    final box = await database;
+    await box.delete(id);
   }
 
   // getting all rounds from db
   Future<List<RoundResults>> getRounds() async {
-    final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('rounds');
-    return List.generate(maps.length, (i) {
-      return RoundResults.fromMap(maps[i]);
-    });
-  }
+    final box = await database;
+    final List<RoundResults> rounds = [];
 
-  // get a specific round by id
-  Future<RoundResults?> getRound(int id) async {
-    final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'rounds',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    // Debugging
+    //print('Retrieving rounds from Hive: ${box.length} entries found');
 
-    if (maps.isNotEmpty) {
-      return RoundResults.fromMap(maps.first);
+    try {
+      for (var key in box.keys) {
+        final data = box.get(key);
+        //print('Retrieved data for key $key: $data');
+
+        if (data != null) {
+          final roundMap = Map<String, dynamic>.from(data);
+          final round = RoundResults.fromMap(roundMap);
+          rounds.add(round);
+        }
+      }
+    } catch (e) {
+      //print('Error retrieving rounds: $e');
     }
-    return null;
-  }
 
-  // get rounds by team name
-  Future<List<RoundResults>> getRoundsByTeam(String teamName) async {
-    final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'rounds',
-      where: 'teamA = ? OR teamB = ?',
-      whereArgs: [teamName, teamName],
-    );
-
-    return List.generate(maps.length, (i) {
-      return RoundResults.fromMap(maps[i]);
-    });
+    //print('Returning ${rounds.length} rounds');
+    return rounds;
   }
 
   // close the db
   Future<void> close() async {
-    final Database db = await database;
-    await db.close();
+    final box = await database;
+    await box.close();
+  }
+
+  Future<void> clearRounds() async {
+    final box = await database;
+    await box.clear();
   }
 }

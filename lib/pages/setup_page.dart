@@ -31,7 +31,7 @@ class _SetupPageState extends State<SetupPage> {
   void _confirmTeamNames() {
     final nameA = _teamANameController.text.trim();
     final nameB = _teamBNameController.text.trim();
-    
+
     if (nameA.isNotEmpty && nameB.isNotEmpty) {
       setState(() {
         teamAName = nameA;
@@ -68,14 +68,13 @@ class _SetupPageState extends State<SetupPage> {
         context,
         MaterialPageRoute(
           builder:
-              (context) =>
-                  GamePage(
-                    teamA: teamA, 
-                    teamB: teamB, 
-                    totalRounds: roundCount, 
-                    teamAName: teamAName, 
-                    teamBName: teamBName
-                  ),
+              (context) => GamePage(
+                teamA: teamA,
+                teamB: teamB,
+                totalRounds: roundCount,
+                teamAName: teamAName,
+                teamBName: teamBName,
+              ),
         ),
       );
     } else {
@@ -88,195 +87,10 @@ class _SetupPageState extends State<SetupPage> {
     }
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(title: const Text('Setup Game'), centerTitle: true,),
-  //     body: Container(
-  //       decoration: const BoxDecoration(
-  //         gradient: LinearGradient(
-  //           colors: [Colors.blueAccent, Color.fromARGB(255, 105, 50, 201)],
-  //           begin: Alignment.topCenter,
-  //           end: Alignment.bottomCenter,
-  //         ),
-  //       ),
-  //       child: SafeArea(
-  //         child: LayoutBuilder(
-  //           builder: (context, constraints) {
-  //             return SingleChildScrollView(
-  //               padding: const EdgeInsets.all(16),
-  //               child: ConstrainedBox(
-  //                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
-  //                 child: IntrinsicHeight(
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //                     children: [
-  //                       const Text(
-  //                         'Add Players',
-  //                         style: TextStyle(
-  //                           fontSize: 24,
-  //                           fontWeight: FontWeight.bold,
-  //                           color: Colors.white,
-  //                         ),
-  //                       ),
-  //                       const SizedBox(height: 16),
-  //                       TextField(
-  //                         controller: _nameController,
-  //                         style: const TextStyle(color: Colors.white),
-  //                         decoration: InputDecoration(
-  //                           labelText: 'Player Name',
-  //                           labelStyle: const TextStyle(color: Colors.white),
-  //                           enabledBorder: OutlineInputBorder(
-  //                             borderSide: BorderSide(color: Colors.white70),
-  //                             borderRadius: BorderRadius.circular(10),
-  //                           ),
-  //                           focusedBorder: OutlineInputBorder(
-  //                             borderSide: BorderSide(color: Colors.white),
-  //                             borderRadius: BorderRadius.circular(10),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                       const SizedBox(height: 12),
-  //                       Row(
-  //                         children: [
-  //                           const Text(
-  //                             'Team:',
-  //                             style: TextStyle(color: Colors.white),
-  //                           ),
-  //                           const SizedBox(width: 10),
-  //                           DropdownButton<String>(
-  //                             value: selectedTeam,
-  //                             dropdownColor: Colors.deepPurple[300],
-  //                             items:
-  //                                 ['A', 'B'].map((team) {
-  //                                   return DropdownMenuItem(
-  //                                     value: team,
-  //                                     child: Text(
-  //                                       'Team $team',
-  //                                       style: const TextStyle(
-  //                                         color: Colors.white,
-  //                                       ),
-  //                                     ),
-  //                                   );
-  //                                 }).toList(),
-  //                             onChanged:
-  //                                 (value) =>
-  //                                     setState(() => selectedTeam = value!),
-  //                           ),
-  //                           const SizedBox(width: 20),
-  //                           ElevatedButton.icon(
-  //                             icon: const Icon(Icons.add),
-  //                             label: const Text('Add'),
-  //                             onPressed: _addPlayer,
-  //                           ),
-  //                         ],
-  //                       ),
-  //                       const SizedBox(height: 24),
-  //                       _buildTeamList('Team A', teamA),
-  //                       const SizedBox(height: 12),
-  //                       _buildTeamList('Team B', teamB),
-  //                       const SizedBox(height: 24),
-  //                       Row(
-  //                         children: [
-  //                           const Text(
-  //                             'Rounds:',
-  //                             style: TextStyle(color: Colors.white),
-  //                           ),
-  //                           const SizedBox(width: 10),
-  //                           DropdownButton<int>(
-  //                             value: roundCount,
-  //                             dropdownColor: Colors.deepPurple[300],
-  //                             items:
-  //                                 [1, 3, 5, 7].map((n) {
-  //                                   return DropdownMenuItem(
-  //                                     value: n,
-  //                                     child: Text(
-  //                                       '$n',
-  //                                       style: const TextStyle(
-  //                                         color: Colors.white,
-  //                                       ),
-  //                                     ),
-  //                                   );
-  //                                 }).toList(),
-  //                             onChanged:
-  //                                 (value) =>
-  //                                     setState(() => roundCount = value!),
-  //                           ),
-  //                         ],
-  //                       ),
-  //                       const SizedBox(height: 32),
-  //                       SizedBox(
-  //                         width: MediaQuery.of(context).size.width * 0.7,
-  //                         child: ElevatedButton.icon(
-  //                           icon: const Icon(Icons.play_arrow),
-  //                           label: const Text(
-  //                             'Start Game',
-  //                             style: TextStyle(fontSize: 18),
-  //                           ),
-  //                           onPressed: _startGame,
-  //                           style: ElevatedButton.styleFrom(
-  //                             padding: const EdgeInsets.symmetric(vertical: 16),
-  //                             shape: RoundedRectangleBorder(
-  //                               borderRadius: BorderRadius.circular(12),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget _buildTeamList(String teamName, List<String> players) {
-  //   return Container(
-  //     width: double.infinity,
-  //     padding: const EdgeInsets.all(12),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white.withOpacity(0.1),
-  //       border: Border.all(color: Colors.white24),
-  //       borderRadius: BorderRadius.circular(10),
-  //     ),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text(
-  //           '$teamName (${players.length})',
-  //           style: const TextStyle(
-  //             fontSize: 16,
-  //             fontWeight: FontWeight.bold,
-  //             color: Colors.white,
-  //           ),
-  //         ),
-  //         const SizedBox(height: 8),
-  //         if (players.isEmpty)
-  //           const Text(
-  //             'No players yet',
-  //             style: TextStyle(color: Colors.white70),
-  //           )
-  //         else
-  //           ...players.map(
-  //             (name) =>
-  //                 Text('• $name', style: const TextStyle(color: Colors.white)),
-  //           ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Game Setup'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Game Setup'), centerTitle: true),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: const BoxDecoration(
@@ -290,7 +104,7 @@ class _SetupPageState extends State<SetupPage> {
       ),
     );
   }
-  
+
   Widget _buildTeamNameSetup() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -306,9 +120,7 @@ class _SetupPageState extends State<SetupPage> {
           controller: _teamANameController,
           decoration: InputDecoration(
             labelText: 'Team A Name',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             filled: true,
             fillColor: Colors.white,
           ),
@@ -318,9 +130,7 @@ class _SetupPageState extends State<SetupPage> {
           controller: _teamBNameController,
           decoration: InputDecoration(
             labelText: 'Team B Name',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             filled: true,
             fillColor: Colors.white,
           ),
@@ -334,12 +144,15 @@ class _SetupPageState extends State<SetupPage> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          child: const Text('Confirm Team Names', style: TextStyle(fontSize: 16)),
+          child: const Text(
+            'Confirm Team Names',
+            style: TextStyle(fontSize: 16),
+          ),
         ),
       ],
     );
   }
-  
+
   Widget _buildPlayerSetup() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -386,14 +199,8 @@ class _SetupPageState extends State<SetupPage> {
                         });
                       },
                       items: [
-                        DropdownMenuItem(
-                          value: 'A',
-                          child: Text(teamAName),
-                        ),
-                        DropdownMenuItem(
-                          value: 'B',
-                          child: Text(teamBName),
-                        ),
+                        DropdownMenuItem(value: 'A', child: Text(teamAName)),
+                        DropdownMenuItem(value: 'B', child: Text(teamBName)),
                       ],
                     ),
                     const SizedBox(width: 10),
@@ -408,7 +215,7 @@ class _SetupPageState extends State<SetupPage> {
             ),
           ),
         ),
-        
+
         // Team display section
         Expanded(
           child: Row(
@@ -440,7 +247,10 @@ class _SetupPageState extends State<SetupPage> {
                             return ListTile(
                               title: Text(teamA[index]),
                               trailing: IconButton(
-                                icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                                icon: const Icon(
+                                  Icons.remove_circle_outline,
+                                  color: Colors.red,
+                                ),
                                 onPressed: () {
                                   setState(() {
                                     teamA.removeAt(index);
@@ -455,7 +265,7 @@ class _SetupPageState extends State<SetupPage> {
                   ),
                 ),
               ),
-              
+
               // Team B
               Expanded(
                 child: Card(
@@ -483,7 +293,10 @@ class _SetupPageState extends State<SetupPage> {
                             return ListTile(
                               title: Text(teamB[index]),
                               trailing: IconButton(
-                                icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                                icon: const Icon(
+                                  Icons.remove_circle_outline,
+                                  color: Colors.red,
+                                ),
                                 onPressed: () {
                                   setState(() {
                                     teamB.removeAt(index);
@@ -501,7 +314,7 @@ class _SetupPageState extends State<SetupPage> {
             ],
           ),
         ),
-        
+
         // Round selection
         Card(
           elevation: 4,
@@ -537,7 +350,7 @@ class _SetupPageState extends State<SetupPage> {
             ),
           ),
         ),
-        
+
         // Start game button
         ElevatedButton(
           onPressed: _startGame,

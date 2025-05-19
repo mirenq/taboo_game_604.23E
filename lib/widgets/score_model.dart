@@ -30,14 +30,15 @@ class RoundResults {
     };
   }
 
-  factory RoundResults.fromMap(Map<String, dynamic> map) {
+  static RoundResults fromMap(Map<String, dynamic> map) {
+    //print('Converting map to RoundResults: $map');
     return RoundResults(
       id: map['id'],
-      teamA: map['teamA'],
-      teamB: map['teamB'],
-      scoreA: map['scoreA'],
-      scoreB: map['scoreB'],
-      round: map['round'],
+      teamA: map['teamA'] ?? 'Unknown',
+      teamB: map['teamB'] ?? 'Unknown',
+      scoreA: map['scoreA'] ?? 0,
+      scoreB: map['scoreB'] ?? 0,
+      round: map['round'] ?? 0,
     );
   }
 
@@ -69,19 +70,3 @@ class ScoreModal extends StatelessWidget {
     );
   }
 }
-
-//To use this class:
-/*
-showDialog(
-  context: context,
-  builder: (context) => ScoreModal(
-    teamAScore: 5,
-    teamBScore: 3,
-    round: 2,
-    onNextRound: () {
-      Navigator.of(context).pop();
-      // logic to go to the next round
-    },
-  ),
-);
-*/
