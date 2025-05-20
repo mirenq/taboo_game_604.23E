@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/local_storage_service.dart';
-import '../widgets/score_model.dart'; // or '../models/round_results.dart' if you moved it
+import '../widgets/score_model.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -43,6 +43,10 @@ class _HistoryPageState extends State<HistoryPage> {
     } catch (e) {
       //print('Error deleting round: $e');
     }
+  }
+
+  String _formatDate(DateTime dateTime) {
+    return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -90,6 +94,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             const SizedBox(height: 4),
                             Text('${game.teamA} vs ${game.teamB}'),
                             Text('Score: ${game.scoreA} - ${game.scoreB}'),
+                            Text('Date: ${_formatDate(game.timestamp)}'),
                           ],
                         ),
                         trailing: IconButton(

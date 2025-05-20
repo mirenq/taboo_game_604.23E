@@ -1,5 +1,3 @@
-// widgets/score_modal.dart
-
 import 'package:flutter/material.dart';
 
 class RoundResults {
@@ -9,6 +7,7 @@ class RoundResults {
   final int scoreA;
   final int scoreB;
   final int round;
+  final DateTime timestamp;
 
   const RoundResults({
     this.id,
@@ -17,6 +16,7 @@ class RoundResults {
     required this.scoreA,
     required this.scoreB,
     required this.round,
+    required this.timestamp,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,6 +27,7 @@ class RoundResults {
       'scoreA': scoreA,
       'scoreB': scoreB,
       'round': round,
+      'timestamp': timestamp.millisecondsSinceEpoch,
     };
   }
 
@@ -39,12 +40,15 @@ class RoundResults {
       scoreA: map['scoreA'] ?? 0,
       scoreB: map['scoreB'] ?? 0,
       round: map['round'] ?? 0,
+      timestamp: map['timestamp'] != null 
+          ? DateTime.fromMillisecondsSinceEpoch(map['timestamp']) 
+          : DateTime.now(),
     );
   }
 
   @override
   String toString() {
-    return 'Match{id: $id, teamA: $teamA, teamB: $teamB, scoreA: $scoreA, scoreB: $scoreB, round: $round}';
+    return 'Match{id: $id, teamA: $teamA, teamB: $teamB, scoreA: $scoreA, scoreB: $scoreB, round: $round, timestamp: $timestamp}';
   }
 }
 
