@@ -19,6 +19,16 @@ class RoundResults {
     required this.timestamp,
   });
 
+  String get winner {
+    if (scoreA > scoreB) {
+      return teamA;
+    } else if (scoreB > scoreA) {
+      return teamB;
+    } else {
+      return "Tie";
+    }
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

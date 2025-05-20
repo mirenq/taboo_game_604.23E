@@ -296,7 +296,7 @@ class _GamePageState extends State<GamePage> {
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                         minimumSize: const Size(100, 50),
                       ),
-                      child: const Text('Taboo', style: TextStyle(fontSize: 16)),
+                      child: const Text('Taboo', style: TextStyle(color: Colors.white, fontSize: 16)),
                     ),
                   ],
                 ),
