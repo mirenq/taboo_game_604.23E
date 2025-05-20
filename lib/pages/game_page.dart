@@ -123,11 +123,6 @@ class _GamePageState extends State<GamePage> {
       // Reset score for the new player
       roundScore = 0;
     });
-
-    // Reset the timer for the new player's turn
-    if (_wordCardKey.currentState != null) {
-      _wordCardKey.currentState!.resetTimer();
-    }
   }
 
   void _showTeamChangeDialog() {
@@ -144,6 +139,7 @@ class _GamePageState extends State<GamePage> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                _wordCardKey.currentState!.resetTimer();
               },
               child: const Text('Start'),
             ),
@@ -174,7 +170,6 @@ class _GamePageState extends State<GamePage> {
   }
 
   void _showFinalResults() {
-
     // Show the final score dialog
     showDialog(
       context: context,
