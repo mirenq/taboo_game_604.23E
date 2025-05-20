@@ -45,6 +45,10 @@ class _HistoryPageState extends State<HistoryPage> {
     }
   }
 
+  String _formatDate(DateTime dateTime) {
+    return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,6 +94,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             const SizedBox(height: 4),
                             Text('${game.teamA} vs ${game.teamB}'),
                             Text('Score: ${game.scoreA} - ${game.scoreB}'),
+                            Text('Date: ${_formatDate(game.timestamp)}'),
                           ],
                         ),
                         trailing: IconButton(

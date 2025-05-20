@@ -159,6 +159,7 @@ class _GamePageState extends State<GamePage> {
       scoreA: teamAScore,
       scoreB: teamBScore,
       round: currentRound - 1,
+      timestamp: DateTime.now(),
     );
 
     // Save the results to local storage
