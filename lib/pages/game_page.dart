@@ -105,11 +105,13 @@ class _GamePageState extends State<GamePage> {
           if (currentRound > 1) {
             // Don't save for round 0->1
             _saveRoundResults();
+            _skipCard();
             //print('Saved results for round ${currentRound - 1}');
           }
 
           // Check if we've completed all rounds
           if (currentRound > widget.totalRounds) {
+            currentRound = widget.totalRounds;
             // Game over - show final results
             _showFinalResults();
             return;

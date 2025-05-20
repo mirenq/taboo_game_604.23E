@@ -1,9 +1,5 @@
 import 'dart:async';
-
-//import 'package:flutter/widgets.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import '../widgets/score_model.dart';
 
 class LocalStorageService {

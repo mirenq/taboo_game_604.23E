@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/local_storage_service.dart';
-import '../widgets/score_model.dart'; // or '../models/round_results.dart' if you moved it
+import '../widgets/score_model.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});

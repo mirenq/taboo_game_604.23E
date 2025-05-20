@@ -1,5 +1,3 @@
-// widgets/score_modal.dart
-
 import 'package:flutter/material.dart';
 
 class RoundResults {
