@@ -144,6 +144,7 @@ class _GamePageState extends State<GamePage> {
                 _wordCardKey.currentState!.resetTimer();
               },
               child: const Text('Start'),
+              //style:ButtonStyle(fixedSize: )
             ),
           ],
         );
@@ -237,14 +238,14 @@ class _GamePageState extends State<GamePage> {
                 children: [
                   Text(
                     'Round $currentRound / ${widget.totalRounds}',
-                    style: const TextStyle(fontSize: 18, color: Colors.white),
+                    style: const TextStyle(fontSize: 24, color: Colors.white),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     isTeamATurn
                         ? '${widget.teamAName}\'s Turn'
                         : '${widget.teamBName}\'s Turn',
-                    style: const TextStyle(fontSize: 16, color: Colors.white70),
+                    style: const TextStyle(fontSize: 20, color: Colors.white70),
                   ),
                 ],
               ),
@@ -265,7 +266,7 @@ class _GamePageState extends State<GamePage> {
               children: [
                 Text(
                   'Score: $roundScore',
-                  style: const TextStyle(fontSize: 20, color: Colors.white),
+                  style: const TextStyle(fontSize: 26, color: Colors.white),
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -273,18 +274,29 @@ class _GamePageState extends State<GamePage> {
                   children: [
                     ElevatedButton(
                       onPressed: _skipCard,
-                      child: const Text('Skip'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        minimumSize: const Size(100, 50),
+                      ),
+                      child: const Text('Skip', style: TextStyle(fontSize: 16)),
+                      
                     ),
                     ElevatedButton(
                       onPressed: _correctAnswer,
-                      child: const Text('Correct'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        minimumSize: const Size(100, 50),
+                      ),
+                      child: const Text('Correct', style: TextStyle(fontSize: 16)),
                     ),
                     ElevatedButton(
                       onPressed: _tabooViolation,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        minimumSize: const Size(100, 50),
                       ),
-                      child: const Text('Taboo'),
+                      child: const Text('Taboo', style: TextStyle(color: Colors.white, fontSize: 16)),
                     ),
                   ],
                 ),

@@ -86,15 +86,25 @@ class _HistoryPageState extends State<HistoryPage> {
                         ),
                         title: Text(
                           'Round ${game.round}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 4),
-                            Text('${game.teamA} vs ${game.teamB}'),
-                            Text('Score: ${game.scoreA} - ${game.scoreB}'),
-                            Text('Date: ${_formatDate(game.timestamp)}'),
+                            const SizedBox(height: 12),
+                            Text('${game.teamA} vs ${game.teamB}', style: TextStyle(fontSize: 20)),
+                            Text('Score: ${game.scoreA} - ${game.scoreB}', style: TextStyle(fontSize: 20)),
+                            Text(
+                              'Winner: ${game.winner == "Tie" ? "Tie Game" : "${game.winner} won!"}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: game.winner == "Tie" 
+                                    ? Colors.blue 
+                                    : (game.winner == game.teamA ? Colors.green : Colors.orange),
+                              ),
+                            ),
+                            Text('Date: ${_formatDate(game.timestamp)}', style: TextStyle(fontSize: 20)),
                           ],
                         ),
                         trailing: IconButton(

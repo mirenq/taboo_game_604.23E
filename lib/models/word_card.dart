@@ -33,7 +33,7 @@ class WordCard extends StatelessWidget {
             ),
             child: Text(
               mainWord,
-              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -45,7 +45,7 @@ class WordCard extends StatelessWidget {
         ...forbiddenWords.map(
           (word) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 2.0),
-            child: Text('• $word', style: const TextStyle(fontSize: 16)),
+            child: Text('• $word', style: const TextStyle(fontSize: 24)),
           ),
         ),
       ],
