@@ -72,7 +72,7 @@ class WordCardWidgetState extends State<WordCardWidget> {
 
   void resetTimer() {
     setState(() {
-      timeLeft = 30;
+      timeLeft = 10;
     });
     startTimer();
   }

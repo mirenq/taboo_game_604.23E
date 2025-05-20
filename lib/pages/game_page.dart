@@ -105,7 +105,7 @@ class _GamePageState extends State<GamePage> {
           if (currentRound > 1) {
             // Don't save for round 0->1
             _saveRoundResults();
-            _skipCard();
+            //_skipCard();
             //print('Saved results for round ${currentRound - 1}');
           }
 
